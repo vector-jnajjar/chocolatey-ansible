@@ -714,3 +714,12 @@
     - (checksum_actual_info.stdout|from_json).checksum_type == "sha1"
     - (checksum_actual_info.stdout|from_json).checksum64 == "a3a1f075f5b0e9ee7cd2ba33afbb5f67b9e335117ef3ea352fc361b098aecad4"
     - (checksum_actual_info.stdout|from_json).checksum_type64 == "sha256"
+
+
+- name: install package with duplicate choco.exe entries in PATH
+  win_chocolatey:
+    name: '{{ test_choco_package1 }}'
+    state: present
+    force: true
+  environment:
+    PATH: {{ choco_install_dir }};{{ choco_install_dir }}/bin;{{ ansible_env.PATH }}
