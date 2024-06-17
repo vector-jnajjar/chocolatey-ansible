@@ -716,6 +716,17 @@
     - (checksum_actual_info.stdout|from_json).checksum_type64 == "sha256"
 
 
+- name: find choco
+  ansible.windows.win_powershell:
+    script: |
+      Get-ChildItem {{ choco_install_dir }}/**choco.exe -r
+  register: choco_paths
+
+- name: Print variable contents
+  ansible.builtin.debug:
+    var: choco_paths
+    verbosity: 0
+
 - name: install package with duplicate choco.exe entries in PATH
   win_chocolatey:
     name: '{{ test_choco_package1 }}'
