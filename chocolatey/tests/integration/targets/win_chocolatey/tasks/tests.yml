@@ -715,17 +715,19 @@
     - (checksum_actual_info.stdout|from_json).checksum64 == "a3a1f075f5b0e9ee7cd2ba33afbb5f67b9e335117ef3ea352fc361b098aecad4"
     - (checksum_actual_info.stdout|from_json).checksum_type64 == "sha256"
 
-
 - name: find choco
   ansible.windows.win_powershell:
     script: |
-      Get-ChildItem {{ choco_install_dir }}/**choco.exe -r
+      Get-Command -Name choco.exe -CommandType Application -ErrorAction SilentlyContinue 
   register: choco_paths
 
-- name: Print variable contents
-  ansible.builtin.debug:
-    var: choco_paths
-    verbosity: 0
+- name: find choco with modified path
+  ansible.windows.win_powershell:
+    script: |
+      Get-Command -Name choco.exe -CommandType Application -ErrorAction SilentlyContinue 
+  register: choco_paths
+  environment:
+    path: "{{ choco_install_dir }};{{ choco_install_dir }}/bin;{{ ansible_env.Path }}"
 
 - name: install package with duplicate choco.exe entries in PATH
   win_chocolatey:
