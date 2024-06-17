@@ -727,7 +727,7 @@
       Get-Command -Name choco.exe -CommandType Application -ErrorAction SilentlyContinue 
   register: choco_paths
   environment:
-    path: "{{ choco_install_dir }};{{ choco_install_dir }}/bin;{{ ansible_env.Path }}"
+    path: "C:/ProgramData/chocolatey;C:/ProgramData/chocolatey/bin;C:/ProgramData/chocolatey/redirects;{{ ansible_env.Path }}"
 
 - name: install package with duplicate choco.exe entries in PATH
   win_chocolatey:
